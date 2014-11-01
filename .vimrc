@@ -14,18 +14,10 @@ call neobundle#begin(expand('/home/php/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
+NeoBundle 'md5.vim'
 NeoBundle 'Align'
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'kien/ctrlp.vim'
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'violetyk/neocomplete-php.vim'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'tpope/vim-endwise.git'
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc', {
       \  'build' : {
@@ -36,11 +28,21 @@ NeoBundle 'Shougo/vimproc', {
       \    'unix'    : 'gmake',
       \   },
       \ }
-NeoBundle 'Lokaltog/powerline'
+NeoBundle 'Shougo/neosnippet.vim'
+NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'tpope/vim-endwise.git'
+NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'violetyk/neocomplete-php.vim'
 NeoBundle 'stephpy/vim-php-cs-fixer'
-NeoBundle 'altercation/solarized'
+NeoBundle 'mattn/emmet-vim'
 
 " neocomplete-php.vim
 let g:neocomplete_php_locale = 'ja'
@@ -70,7 +72,7 @@ colorscheme solarized
 let g:solarized_termcolors=256
 
 " system
-set	nobackup
+set nobackup
 set noswapfile
 set nowritebackup
 set wrap
@@ -86,17 +88,17 @@ set clipboard=unnamed,autoselect
 set nrformats=
 
 " editor visual
-set	number
+set number
 
 " tabs and indent
-set	expandtab
-set	smartindent
+set expandtab
+set smartindent
 set shiftwidth=4
 set tabstop=4
 
 " fileencoding
-set	fenc=utf8
-set	fencs=utf8,sjis,euc-jp,iso-2022-jp,cp932
+set fenc=utf8
+set fencs=utf8,sjis,euc-jp,iso-2022-jp,cp932
 
 " brace match
 set matchpairs& matchpairs+=<:>
@@ -173,7 +175,7 @@ let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
     \ 'vimshell' : $HOME.'/.vimshell_hist',
     \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+    \ }
 
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
@@ -278,6 +280,25 @@ autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "if has('vim_starting') && file_name == ""
 "    autocmd VimEnter * NERDTree ./
 "endif
+
+"-----------------
+" quickrun
+"-----------------
+let g:quickrun_config={'*': {'split': ''}}
+let g:quickrun_config._={ 'runner': 'vimproc',
+      \ 'runner/vimproc/updatetime': 10,
+      \ 'outputter/buffer/close_on_empty': 1,
+      \ }
+
+"-----------------
+" lightline
+"-----------------
+set laststatus=2
+set t_Co=256
+let g:lightline = {
+      \ 'colorscheme': 'solarized'
+      \ }
+
 
 NeoBundleCheck
 "=======================================

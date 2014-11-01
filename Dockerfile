@@ -59,10 +59,6 @@ RUN echo 'LANG=ja_JP.UTF-8' > /etc/default/locale
 USER php
 WORKDIR /home/php
 ENV HOME /home/php
-ADD .vimrc /home/php/.vimrc
-RUN mkdir -p .vim/bundle
-RUN curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
-RUN cd ~/.vim/bundle/neobundle.vim/bin/ && ./neoinstall
 
 #------------------------------------------------
 # phpenv
@@ -84,6 +80,37 @@ RUN curl -o /home/php/.phpenv/plugins/php-build/share/php-build/after-install.d/
 RUN chmod +x /home/php/.phpenv/plugins/php-build/share/php-build/after-install.d/phpunit
 
 ENV PATH /home/php/.phpenv/shims:/home/php/.phpenv/bin:$PATH
+
+#------------------------------------------------
+# php install
+#------------------------------------------------
+ADD ./installver /home/php/installver
+RUN for ver in `cat ./installver`; do phpenv install $ver; done
+RUN phpenv global `head -n 1 installver`
+
+#------------------------------------------------
+# phpdict
+#------------------------------------------------
+RUN mkdir -p ~/.vim/dict
+RUN php -r '$f=get_defined_functions();echo join("\n", $f["internal"]);'|sort > ~/.vim/dict/php.dict
+
+#------------------------------------------------
+# composer
+#------------------------------------------------
+USER root
+RUN cd /tmp
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+USER php
+
+#------------------------------------------------
+# vimrc
+#------------------------------------------------
+ADD .vimrc /home/php/.vimrc
+RUN mkdir -p .vim/bundle
+RUN curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+RUN cd ~/.vim/bundle/neobundle.vim/bin/ && ./neoinstall
+RUN export LANG=ja_JP.UTF-8; vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
 
 #------------------------------------------------
 # zshrc
