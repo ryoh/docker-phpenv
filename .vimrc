@@ -14,8 +14,8 @@ call neobundle#begin(expand('/home/php/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'md5.vim'
 NeoBundle 'Align'
+NeoBundle 'vim-scripts/md5.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimfiler'
@@ -34,7 +34,6 @@ NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'tpope/vim-endwise.git'
-NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'kien/ctrlp.vim'

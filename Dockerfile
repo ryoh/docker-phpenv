@@ -33,13 +33,24 @@ RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://jp.archive.ubuntu.com/ubu
 #------------------------------------------------
 # Install Base Software
 #------------------------------------------------
-RUN apt-get install -y sudo apt-utils zsh ack-grep unzip tar gzip bzip2 && \
+RUN apt-get install -y sudo ack-grep zsh lv vim-nox curl && \
     chmod +s /usr/bin/sudo
+
+#------------------------------------------------
+# Vim 7.4 (enabled python3 interface)
+#------------------------------------------------
+ADD ./package/deb/vim/amd64 /tmp/deb
+RUN dpkg -i /tmp/deb/vim-tiny_7.4.052-1ubuntu4_amd64.deb \
+            /tmp/deb/vim-common_7.4.052-1ubuntu4_amd64.deb \
+            /tmp/deb/vim-runtime_7.4.052-1ubuntu4_all.deb \
+            /tmp/deb/vim-nox_7.4.052-1ubuntu4_amd64.deb \
+            /tmp/deb/vim_7.4.052-1ubuntu4_amd64.deb \
+            && apt-get -f install
 
 #------------------------------------------------
 # Install Dev tools
 #------------------------------------------------
-RUN apt-get install -y build-essential git-core bison
+RUN apt-get install -y git-core make bison gcc cpp g++
 
 #------------------------------------------------
 # Install phpenv libraries
@@ -57,6 +68,7 @@ RUN apt-get install -y libxml2-dev libssl-dev \
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
     add-apt-repository 'deb http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu trusty main'
 RUN apt-get update && apt-get install -y mariadb-server sqlite3
+ADD my.cnf /etc/mysql/my.cnf
 
 #------------------------------------------------
 # composer
@@ -105,20 +117,34 @@ RUN phpenv global `head -n 1 installver`
 #------------------------------------------------
 # phpdict
 #------------------------------------------------
-RUN mkdir -p ~/.vim/dict
-RUN php -r '$f=get_defined_functions();echo join("\n", $f["internal"]);'|sort > ~/.vim/dict/php.dict
+RUN mkdir -p ~/.vim/dict && \
+    php -r '$f=get_defined_functions();echo join("\n", $f["internal"]);'|sort > ~/.vim/dict/php.dict
+
+#------------------------------------------------
+# phpcs, phpmd
+#------------------------------------------------
+RUN composer global require 'squizlabs/php_codesniffer=*' && \
+    composer global require 'phpmd/phpmd=*'
 
 #------------------------------------------------
 # vimrc
 #------------------------------------------------
 ADD .vimrc /home/php/.vimrc
+RUN sudo apt-get update && sudo apt-get install subversion -y
 RUN mkdir -p .vim/bundle && \
     curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh && \
     cd ~/.vim/bundle/neobundle.vim/bin/ && \
-    ./neoinstall && \
-    vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
+    ./neoinstall
+ENV LC_ALL ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
+RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
 
 #------------------------------------------------
 # zshrc
 #------------------------------------------------
 ADD .zshrc /home/php/.zshrc
+
+#------------------------------------------------
+# Cache clean
+#------------------------------------------------
+RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
