@@ -42,6 +42,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'violetyk/neocomplete-php.vim'
 NeoBundle 'stephpy/vim-php-cs-fixer'
 NeoBundle 'mattn/emmet-vim'
+NeoBundle 'PDV--phpDocumentor-for-Vim'
 
 " neocomplete-php.vim
 let g:neocomplete_php_locale = 'ja'
@@ -67,7 +68,7 @@ syntax on
 
 " colorscheme
 set background=dark
-colorscheme solarized
+colorscheme torte
 let g:solarized_termcolors=256
 
 " system
@@ -298,6 +299,12 @@ let g:lightline = {
       \ 'colorscheme': 'solarized'
       \ }
 
+"-----------------
+" phpdocumentor
+"-----------------
+inoremap <C-P> <ESC>:call PhpDocSingle()<CR>i
+nnoremap <C-P> :call PhpDocSingle()<CR>
+vnoremap <C-P> :call PhpDocRange()<CR>
 
 NeoBundleCheck
 "=======================================

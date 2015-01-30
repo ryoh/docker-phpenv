@@ -2,7 +2,7 @@
 # --------------------------
 # envelonment
 # --------------------------
-FROM phusion/baseimage:0.9.15
+FROM phusion/baseimage:latest
 MAINTAINER Ryoh Kawai <kawairyoh@gmail.com>
 
 # Set correct environment variables.
