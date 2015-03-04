@@ -33,8 +33,7 @@ RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://jp.archive.ubuntu.com/ubu
 #------------------------------------------------
 # Install Base Software
 #------------------------------------------------
-RUN apt-get install -y sudo ack-grep zsh lv vim-nox curl && \
-    chmod +s /usr/bin/sudo
+RUN apt-get install -y sudo ack-grep zsh lv vim-nox curl lftp jq
 
 #------------------------------------------------
 # Vim 7.4 (enabled python3 interface)
@@ -50,7 +49,7 @@ RUN dpkg -i /tmp/deb/vim-tiny_7.4.052-1ubuntu4_amd64.deb \
 #------------------------------------------------
 # Install Dev tools
 #------------------------------------------------
-RUN apt-get install -y git-core make bison gcc cpp g++
+RUN apt-get install -y git-core make bison gcc cpp g++ subversion
 
 #------------------------------------------------
 # Install phpenv libraries
@@ -59,16 +58,16 @@ RUN apt-get install -y libxml2-dev libssl-dev \
     libcurl4-gnutls-dev libjpeg-dev libpng12-dev libmcrypt-dev \
     libreadline-dev libtidy-dev libxslt1-dev autoconf \
     re2c libmysqlclient-dev libsqlite3-dev libbz2-dev \
-    php5-cli
+    php5-cli sqlite3
 
 #------------------------------------------------
 # Install DB Servers
 #------------------------------------------------
 # MariaDB 10.1
-RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
-    add-apt-repository 'deb http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu trusty main'
-RUN apt-get update && apt-get install -y mariadb-server sqlite3
-ADD my.cnf /etc/mysql/my.cnf
+#RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
+#add-apt-repository 'deb http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu trusty main'
+#RUN apt-get update && apt-get install -y sqlite3
+#ADD my.cnf /etc/mysql/my.cnf
 
 #------------------------------------------------
 # composer
@@ -81,6 +80,12 @@ RUN cd /tmp && \
 # Cache clean
 #------------------------------------------------
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+#------------------------------------------------
+# Fix sudo error
+#------------------------------------------------
+RUN chown root:root /usr/bin/sudo
+RUN chmod 4755 /usr/bin/sudo
 
 #------------------------------------------------
 # Add php user
@@ -130,14 +135,13 @@ RUN composer global require 'squizlabs/php_codesniffer=*' && \
 # vimrc
 #------------------------------------------------
 ADD .vimrc /home/php/.vimrc
-RUN sudo apt-get update && sudo apt-get install subversion -y
 RUN mkdir -p .vim/bundle && \
     curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh && \
     cd ~/.vim/bundle/neobundle.vim/bin/ && \
     ./neoinstall
 ENV LC_ALL ja_JP.UTF-8
 ENV LANG ja_JP.UTF-8
-RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
+#RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
 
 #------------------------------------------------
 # zshrc

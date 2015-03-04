@@ -302,9 +302,9 @@ let g:lightline = {
 "-----------------
 " phpdocumentor
 "-----------------
-inoremap <C-P> <ESC>:call PhpDocSingle()<CR>i
-nnoremap <C-P> :call PhpDocSingle()<CR>
-vnoremap <C-P> :call PhpDocRange()<CR>
+autocmd FileType php inoremap <C-p> <ESC>:call PhpDocSingle()<CR>i
+autocmd FileType php nnoremap <C-p> :call PhpDocSingle()<CR>
+autocmd FileType php vnoremap <C-p> :call PhpDocRange()<CR>
 
 NeoBundleCheck
 "=======================================
