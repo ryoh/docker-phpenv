@@ -141,7 +141,7 @@ RUN mkdir -p .vim/bundle && \
     ./neoinstall
 ENV LC_ALL ja_JP.UTF-8
 ENV LANG ja_JP.UTF-8
-#RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
+RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
 
 #------------------------------------------------
 # zshrc
