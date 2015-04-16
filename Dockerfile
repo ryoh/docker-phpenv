@@ -106,9 +106,9 @@ ENV PATH /home/php/.phpenv/shims:/home/php/.phpenv/bin:$PATH
 #------------------------------------------------
 # php install
 #------------------------------------------------
-#ADD ./installver /home/php/installver
-#RUN for ver in `cat ./installver`; do phpenv install $ver; done
-#RUN phpenv global `head -n 1 installver`
+ADD ./installver /home/php/installver
+RUN for ver in `cat ./installver`; do phpenv install $ver; done
+RUN phpenv global `head -n 1 installver`
 
 #------------------------------------------------
 # phpdict
