@@ -2,7 +2,7 @@
 # --------------------------
 # envelonment
 # --------------------------
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:0.9.16
 MAINTAINER Ryoh Kawai <kawairyoh@gmail.com>
 
 # Set correct environment variables.
@@ -33,7 +33,7 @@ RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://jp.archive.ubuntu.com/ubu
 #------------------------------------------------
 # Install Base Software
 #------------------------------------------------
-RUN apt-get install -y sudo ack-grep zsh lv vim-nox curl lftp jq
+RUN apt-get install -y sudo ack-grep zsh lv vim-nox curl lftp jq ca-certificates
 
 #------------------------------------------------
 # Vim 7.4 (enabled python3 interface)
@@ -49,7 +49,7 @@ RUN dpkg -i /tmp/deb/vim-tiny_7.4.052-1ubuntu4_amd64.deb \
 #------------------------------------------------
 # Install Dev tools
 #------------------------------------------------
-RUN apt-get install -y git-core make bison gcc cpp g++ subversion
+RUN apt-get install -y git-core make bison gcc cpp g++ subversion exuberant-ctags
 
 #------------------------------------------------
 # Install phpenv libraries
@@ -58,16 +58,7 @@ RUN apt-get install -y libxml2-dev libssl-dev \
     libcurl4-gnutls-dev libjpeg-dev libpng12-dev libmcrypt-dev \
     libreadline-dev libtidy-dev libxslt1-dev autoconf \
     re2c libmysqlclient-dev libsqlite3-dev libbz2-dev \
-    php5-cli sqlite3
-
-#------------------------------------------------
-# Install DB Servers
-#------------------------------------------------
-# MariaDB 10.1
-#RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
-#add-apt-repository 'deb http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu trusty main'
-#RUN apt-get update && apt-get install -y sqlite3
-#ADD my.cnf /etc/mysql/my.cnf
+    php5-cli sqlite3 mysql-server-5.6
 
 #------------------------------------------------
 # composer
@@ -115,9 +106,9 @@ ENV PATH /home/php/.phpenv/shims:/home/php/.phpenv/bin:$PATH
 #------------------------------------------------
 # php install
 #------------------------------------------------
-ADD ./installver /home/php/installver
-RUN for ver in `cat ./installver`; do phpenv install $ver; done
-RUN phpenv global `head -n 1 installver`
+#ADD ./installver /home/php/installver
+#RUN for ver in `cat ./installver`; do phpenv install $ver; done
+#RUN phpenv global `head -n 1 installver`
 
 #------------------------------------------------
 # phpdict
@@ -129,7 +120,8 @@ RUN mkdir -p ~/.vim/dict && \
 # phpcs, phpmd
 #------------------------------------------------
 RUN composer global require 'squizlabs/php_codesniffer=*' && \
-    composer global require 'phpmd/phpmd=*'
+    composer global require 'phpmd/phpmd=*' && \
+    composer global require 'peridot-php/peridot:~1.15'
 
 #------------------------------------------------
 # vimrc

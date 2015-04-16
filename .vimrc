@@ -16,9 +16,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " My Bundles here:
 NeoBundle 'Align'
 NeoBundle 'vim-scripts/md5.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/vimfiler'
+"NeoBundle 'Shougo/unite.vim'
+"NeoBundle 'Shougo/unite-outline'
+"NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc', {
       \  'build' : {
       \    'windows' : 'tools\\update-dll-mingw',
@@ -28,21 +28,21 @@ NeoBundle 'Shougo/vimproc', {
       \    'unix'    : 'gmake',
       \   },
       \ }
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets'
+"NeoBundle 'Shougo/neosnippet.vim'
+"NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'scrooloose/nerdtree'
+"NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'tpope/vim-endwise.git'
-NeoBundle 'thinca/vim-ref'
+"NeoBundle 'tpope/vim-endwise.git'
+"NeoBundle 'thinca/vim-ref'
 NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'kien/ctrlp.vim'
+"NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'violetyk/neocomplete-php.vim'
 NeoBundle 'stephpy/vim-php-cs-fixer'
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'PDV--phpDocumentor-for-Vim'
+"NeoBundle 'PDV--phpDocumentor-for-Vim'
+"NeoBundle 'mattn/emmet-vim'
 
 " neocomplete-php.vim
 let g:neocomplete_php_locale = 'ja'
@@ -271,11 +271,11 @@ let g:php_cs_fixer_verbose = 0
 "-----------------
 " NERDTree
 "-----------------
-map <C-e> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrows = 0
-let g:NERDTreeMouseMode = 0
-autocmd VimEnter * if !argc() | NERDTree ./ | endif
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"map <C-e> :NERDTreeToggle<CR>
+"let g:NERDTreeDirArrows = 0
+"let g:NERDTreeMouseMode = 0
+"autocmd VimEnter * if !argc() | NERDTree ./ | endif
+"autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 "let file_name = expand("%")
 "if has('vim_starting') && file_name == ""
 "    autocmd VimEnter * NERDTree ./
@@ -302,9 +302,9 @@ let g:lightline = {
 "-----------------
 " phpdocumentor
 "-----------------
-autocmd FileType php inoremap <C-p> <ESC>:call PhpDocSingle()<CR>i
-autocmd FileType php nnoremap <C-p> :call PhpDocSingle()<CR>
-autocmd FileType php vnoremap <C-p> :call PhpDocRange()<CR>
+"autocmd FileType php inoremap <C-p> <ESC>:call PhpDocSingle()<CR>i
+"autocmd FileType php nnoremap <C-p> :call PhpDocSingle()<CR>
+"autocmd FileType php vnoremap <C-p> :call PhpDocRange()<CR>
 
 NeoBundleCheck
 "=======================================
