@@ -121,12 +121,13 @@ RUN mkdir -p ~/.vim/dict && \
 #------------------------------------------------
 RUN composer global require 'squizlabs/php_codesniffer=*' && \
     composer global require 'phpmd/phpmd=*' && \
+    composer global require 'phpunit/phpunit=4.6.*' && \
     composer global require 'peridot-php/peridot:~1.15'
 
 #------------------------------------------------
 # vimrc
 #------------------------------------------------
-ADD .vimrc /home/php/.vimrc
+ADD dot.vimrc /home/php/.vimrc
 RUN mkdir -p .vim/bundle && \
     curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh && \
     cd ~/.vim/bundle/neobundle.vim/bin/ && \
@@ -134,6 +135,11 @@ RUN mkdir -p .vim/bundle && \
 ENV LC_ALL ja_JP.UTF-8
 ENV LANG ja_JP.UTF-8
 RUN vim -n -u ~/.vimrc -c "PhpMakeDict ja" -c "qall!" -V1 -U NONE -i NONE -e -s; echo ''
+RUN mkdir -p $HOME/tmp/vim/php && \
+    cd $HOME/tmp/vim/php && \
+    curl -O -L http://jp1.php.net/distributions/manual/php_manual_ja.tar.gz && \
+    tar xzfp php_manual_ja.tar.gz && \
+    rm php_manual_ja
 
 #------------------------------------------------
 # zshrc
