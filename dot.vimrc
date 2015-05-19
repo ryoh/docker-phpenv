@@ -49,6 +49,7 @@ NeoBundle 'vim-scripts/tagbar-phpctags', {
       \   },
       \ } 
 NeoBundle 'vim-scripts/tagbar'
+NeoBundle 'vim-scripts/autoclose'
 
 " neocomplete-php.vim
 let g:neocomplete_php_locale = 'ja'

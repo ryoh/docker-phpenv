@@ -27,8 +27,8 @@ RUN dpkg-divert --local --rename --add /sbin/initctl && \
 #------------------------------------------------
 # Change apt repository site and update
 #------------------------------------------------
-RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://jp.archive.ubuntu.com/ubuntu/#g' /etc/apt/sources.list && \
-    apt-get update
+#RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://jp.archive.ubuntu.com/ubuntu/#g' /etc/apt/sources.list && \
+RUN apt-get update
 
 #------------------------------------------------
 # Install Base Software
@@ -107,7 +107,10 @@ ENV PATH /home/php/.phpenv/shims:/home/php/.phpenv/bin:$PATH
 # php install
 #------------------------------------------------
 ADD ./installver /home/php/installver
-RUN for ver in `cat ./installver`; do phpenv install $ver; done
+RUN for ver in `cat ./installver`; do \
+      phpenv install $ver; \
+      perl -pi -e 's#^;(date.timezone =).*#\1 Asia/Tokyo#g' /home/php/.phpenv/versions/${ver}/etc/php.ini;  \
+    done
 RUN phpenv global `head -n 1 installver`
 
 #------------------------------------------------
@@ -139,7 +142,7 @@ RUN mkdir -p $HOME/tmp/vim/php && \
     cd $HOME/tmp/vim/php && \
     curl -O -L http://jp1.php.net/distributions/manual/php_manual_ja.tar.gz && \
     tar xzfp php_manual_ja.tar.gz && \
-    rm php_manual_ja
+    rm php_manual_ja.tar.gz
 
 #------------------------------------------------
 # zshrc
