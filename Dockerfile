@@ -49,7 +49,7 @@ RUN dpkg -i /tmp/deb/vim-tiny_7.4.052-1ubuntu4_amd64.deb \
 #------------------------------------------------
 # Install Dev tools
 #------------------------------------------------
-RUN apt-get install -y git-core make bison gcc cpp g++ subversion exuberant-ctags
+RUN apt-get install -y git-core make bison gcc cpp g++ subversion exuberant-ctags git-flow
 
 #------------------------------------------------
 # Install phpenv libraries

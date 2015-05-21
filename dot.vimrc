@@ -47,7 +47,7 @@ NeoBundle 'vim-scripts/tagbar-phpctags', {
       \   'build' : {
       \     'others' : 'chmod +x bin/phpctags',
       \   },
-      \ } 
+      \ }
 NeoBundle 'vim-scripts/tagbar'
 NeoBundle 'vim-scripts/autoclose'
 
@@ -139,15 +139,22 @@ nnoremap <S-Right> <C-w>><CR>
 nnoremap <S-Up> <C-w>-<CR>
 nnoremap <S-Up> <C-w>+<CR>
 
+" delete whitespace end of line
+function! s:trim_last_space()
+  let cursor = getpos(".")
+  silent exec '%s/ \+$//e'
+  silent exec 'retab'
+  call setpos(".", cursor)
+  unlet cursor
+endfunction
+autocmd BufWritePre * call <SID>trim_last_space()
+
+
 "--------------
 " PHP
 "--------------
 " set PHP dictionary
 autocmd FileType php,ctp :set dictionary=~/.vim/dict/php.dict
-
-" Syntax check when wrote files.
-autocmd FileType php setlocal makeprg=php\ -l\ %
-autocmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 
 let php_folding = 0
 let php_sql_query = 1
@@ -232,11 +239,11 @@ inoremap <expr><C-e>  neocomplete#cancel_popup()
 "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteC
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTag
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJ
+"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTag
 
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -248,7 +255,7 @@ let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "-----------------
 " noecomplete
@@ -259,12 +266,17 @@ smap <C-k> <Plug>(neosnippet_expand_or_jump)
 "-----------------
 " syntastic
 "-----------------
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_enable_signs = 1
+let g:syntastic_error_symbol = "e"
+let g:syntastic_warning_symbol = "w"
 let g:syntastic_echo_current_error = 1
-let g:syntastic_auto_loc_list = 2
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_enable_highlighting = 1
 let g:syntastic_php_php_args = '-l'
+let g:syntastic_php_phpcs_args = '--standard=psr2'
+let g:syntastic_php_phpmd_post_args = 'codesize,unusedcode'
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -272,10 +284,9 @@ set statusline+=%*
 "-----------------
 " php-cs-fixer
 "-----------------
-let g:php_cs_fixer_level = "all"
+let g:php_cs_fixer_level = "psr2"
 let g:php_cs_fixer_config = "default"
 let g:php_cs_fixer_php_path = "php"
-
 let g:php_cs_fixer_enable_default_mapping = 1
 let g:php_cs_fixer_dry_run = 0
 let g:php_cs_fixer_verbose = 0
@@ -283,7 +294,7 @@ let g:php_cs_fixer_verbose = 0
 "-----------------
 " NERDTree
 "-----------------
-map <C-e> :NERDTreeToggle<CR>
+map <C-B> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrows = 0
 let g:NERDTreeMouseMode = 0
 autocmd VimEnter * if !argc() | NERDTree ./ | endif
